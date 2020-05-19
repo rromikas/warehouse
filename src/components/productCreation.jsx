@@ -33,7 +33,7 @@ const ProductCreation = () => {
           <label htmlFor="productName">Product name</label>
           <input
             required
-            pattern="[a-zA-Z0-9]+"
+            pattern="[a-zA-Z0-9\s]+"
             name="Name"
             type="text"
             className="form-control"
@@ -103,7 +103,7 @@ const ProductCreation = () => {
               <label htmlFor="color">Color</label>
               <input
                 required
-                pattern="[a-zA-Z0-9]+"
+                pattern="[a-zA-Z0-9\s]+"
                 name="Color"
                 type="text"
                 className="form-control"
@@ -117,7 +117,7 @@ const ProductCreation = () => {
               <label htmlFor="weight">Weight</label>
               <input
                 required
-                pattern="[a-zA-Z0-9]+"
+                pattern="[a-zA-Z0-9\s]+"
                 name="Weight"
                 type="text"
                 className="form-control"
@@ -130,7 +130,7 @@ const ProductCreation = () => {
             <div className="form-group">
               <label htmlFor="type">Type</label>
               <input
-                pattern="[a-zA-Z0-9]+"
+                pattern="[a-zA-Z0-9\s]+"
                 required
                 name="Type"
                 type="text"

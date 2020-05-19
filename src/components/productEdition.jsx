@@ -58,6 +58,7 @@ const ProductEdition = (props) => {
             required
             name="Name"
             type="text"
+            pattern="[a-zA-Z0-9\s]+"
             className="form-control"
             id="productName"
             aria-describedby="emailHelp"
@@ -158,7 +159,7 @@ const ProductEdition = (props) => {
               <label htmlFor="color">Color</label>
               <input
                 required
-                pattern="[a-zA-Z0-9]+"
+                pattern="[a-zA-Z0-9\s]+"
                 name="Color"
                 type="text"
                 className="form-control"
@@ -180,7 +181,7 @@ const ProductEdition = (props) => {
               <input
                 required
                 name="Weight"
-                pattern="[a-zA-Z0-9]+"
+                pattern="[a-zA-Z0-9\s]+"
                 type="text"
                 className="form-control"
                 id="weight"
@@ -200,7 +201,7 @@ const ProductEdition = (props) => {
               <label htmlFor="type">Type</label>
               <input
                 required
-                pattern="[a-zA-Z0-9]+"
+                pattern="[a-zA-Z0-9\s]+"
                 name="Type"
                 type="text"
                 className="form-control"

@@ -10,7 +10,6 @@ const LineChart = ({
   xCategory,
   value,
 }) => {
-  console.log(data);
   const options = {
     title: {
       text: title,

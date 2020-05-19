@@ -1,17 +1,25 @@
 import React, { useState } from "react";
 import LineChart from "./charts/lineChart";
+import { header } from "../data/header";
+import uid from "uid";
 
 const Preview = (props) => {
   const id = props.match.params.id;
-  const prices = JSON.parse(localStorage["products"])[id].Price;
-  const quantities = JSON.parse(localStorage["products"])[id].Quantity;
+  let error, prices, quantities;
+  const product = JSON.parse(localStorage["products"])[id];
+  if (product) {
+    prices = product.Price;
+    quantities = product.Quantity;
+  } else {
+    error = "product doesn't exist";
+  }
   const [currentTab, setCurrentTab] = useState(0);
   return (
     <div
       className="px-3"
       style={{ maxWidth: "1300px", minHeight: "100%", margin: "auto" }}
     >
-      <h1 className="p-4">Product Preview</h1>
+      <h1 className="py-4">Product Preview</h1>
       <div className="row no-gutters">
         <div
           onClick={() => setCurrentTab(0)}
@@ -27,7 +35,7 @@ const Preview = (props) => {
             currentTab === 1 ? "primary" : "secondary"
           } text-white lead`}
         >
-          Price Hisotry
+          Price History
         </div>
         <div
           onClick={() => setCurrentTab(2)}
@@ -38,8 +46,33 @@ const Preview = (props) => {
           Quantity History
         </div>
       </div>
-      {currentTab === 0 ? (
-        <div></div>
+      {error ? (
+        <h1>{error}</h1>
+      ) : currentTab === 0 ? (
+        <div className="row no-gutters">
+          <table className="table border">
+            <thead>
+              <tr>
+                {header.slice(0, header.length - 3).map((fieldName) => (
+                  <th key={uid()}>{fieldName}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                {header.slice(0, header.length - 3).map((x) => (
+                  <td key={uid()}>
+                    {x === "Quantity"
+                      ? product[x][product[x].length - 1].quantity
+                      : x === "Price"
+                      ? product[x][product[x].length - 1].price
+                      : product[x].toString()}
+                  </td>
+                ))}
+              </tr>
+            </tbody>
+          </table>
+        </div>
       ) : currentTab === 1 ? (
         <LineChart
           xCategory="date"

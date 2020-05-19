@@ -1,10 +1,17 @@
 import React, { useState } from "react";
-const NumberInput = ({ val, onSet, step = 0.1, min = 0, max = 0 }) => {
+const NumberInput = ({ val, onSet, step = 0.1, min = 0, max = 0, prepend }) => {
   const [letEdit, setLetEdit] = useState(false);
   const [value, setValue] = useState([val, val]); // old value and new value
   return (
     <div className="d-flex">
       <div className="input-group mb-3">
+        {prepend ? (
+          <div className="input-group-prepend">
+            <span className="input-group-text">{prepend}</span>
+          </div>
+        ) : (
+          ""
+        )}
         <input
           disabled={!letEdit}
           min={min}

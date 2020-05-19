@@ -1,39 +1,37 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { initialProducts } from "../data/initialData";
 import { header } from "../data/header";
 import uid from "uid";
-import CheckBox from "./checkbox";
-import NumberInput from "./numberInput";
+import CheckBox from "./utility/checkbox";
+import NumberInput from "./utility/numberInput";
 import history from "../routing/history";
-import Pagination from "./pagination";
+import Pagination from "./utility/pagination";
 import { getDate } from "../utility/getDate";
-const allProducts = localStorage["products"]
-  ? JSON.parse(localStorage["products"])
-  : initialProducts;
-
-// const allProducts = initialProducts;
-
-const maxPrice = 1000000,
-  maxQuantity = 1000000;
+import { maxPrice, maxQuantity } from "../data/limits";
 
 const ProductsList = () => {
+  const allProducts = useRef(
+    localStorage["products"]
+      ? JSON.parse(localStorage["products"])
+      : initialProducts
+  );
   const [productsPerPage, setProductsPerPage] = useState(5);
   const [page, setPage] = useState(0);
   const [products, setProducts] = useState(
-    allProducts.filter(
+    allProducts.current.filter(
       (x, i) => i >= productsPerPage * page && i < productsPerPage * (page + 1)
     )
   );
 
   useEffect(() => {
-    let pageProducts = allProducts.filter(
+    let pageProducts = allProducts.current.filter(
       (x, i) => i >= productsPerPage * page && i < productsPerPage * (page + 1)
     );
     setProducts(pageProducts);
   }, [page]);
 
   useEffect(() => {
-    let pageProducts = allProducts.filter(
+    let pageProducts = allProducts.current.filter(
       (x, i) => i >= productsPerPage * page && i < productsPerPage * (page + 1)
     );
     setProducts(pageProducts);
@@ -41,9 +39,9 @@ const ProductsList = () => {
 
   useEffect(() => {
     products.forEach((x, i) => {
-      allProducts[page * productsPerPage + i] = x;
+      allProducts.current[page * productsPerPage + i] = x;
     });
-    localStorage["products"] = JSON.stringify(allProducts);
+    localStorage["products"] = JSON.stringify(allProducts.current);
   }, [products]);
 
   return (
@@ -51,7 +49,7 @@ const ProductsList = () => {
       className="px-3"
       style={{ maxWidth: "1300px", minHeight: "100%", margin: "auto" }}
     >
-      <h1 className="p-4">Products List</h1>
+      <h1 className="py-4">Products List</h1>
       <table className="table border">
         <thead>
           <tr>
@@ -64,7 +62,7 @@ const ProductsList = () => {
           {products.map((product, i) => {
             return (
               <tr key={uid()}>
-                {Object.keys(product).map((fieldName) => (
+                {header.slice(0, header.length - 3).map((fieldName) => (
                   <td key={uid()}>
                     {fieldName === "Active" ? (
                       <CheckBox
@@ -139,7 +137,7 @@ const ProductsList = () => {
                       history.push({
                         pathname: `/products/${
                           productsPerPage * page + i
-                        }/edit</tr>`,
+                        }/edit`,
                       })
                     }
                   >
@@ -150,7 +148,8 @@ const ProductsList = () => {
                   <div
                     className="btn-danger btn"
                     onClick={() => {
-                      allProducts.splice(productsPerPage * page + i, 1);
+                      let index = productsPerPage * page + i;
+                      allProducts.current.splice(index, 1);
                       setProducts((products) => {
                         let arr = [...products];
                         arr.splice(i, 1);
@@ -169,15 +168,17 @@ const ProductsList = () => {
       <div className="d-flex justify-content-between">
         <Pagination
           current={page}
-          pagesAmount={Math.ceil(allProducts.length / productsPerPage)}
+          pagesAmount={Math.ceil(allProducts.current.length / productsPerPage)}
           setCurrent={setPage}
         ></Pagination>
+
         <NumberInput
           val={productsPerPage}
           onSet={(val) => setProductsPerPage(val)}
           step={5}
           min={5}
           max={20}
+          prepend="Products per page"
         ></NumberInput>
       </div>
     </div>

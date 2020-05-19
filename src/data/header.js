@@ -1,7 +1,7 @@
 export const header = [
   "Name",
   "Price",
-  "Quanity",
+  "Quantity",
   "EAN",
   "Type",
   "Weight",
